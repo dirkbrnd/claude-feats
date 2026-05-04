@@ -8,8 +8,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/dirkbrand/claude-feats/internal/catalog"
-	"github.com/dirkbrand/claude-feats/internal/store"
+	"github.com/dirkbrnd/claude-feats/internal/catalog"
+	"github.com/dirkbrnd/claude-feats/internal/store"
 )
 
 var exportCmd = &cobra.Command{
@@ -71,7 +71,7 @@ func buildMarkdown(p *store.Progress) string {
 		sb.WriteString("\n")
 	}
 
-	sb.WriteString(fmt.Sprintf("---\n*Generated %s with [claude-feats](https://github.com/dirkbrand/claude-feats)*\n",
+	sb.WriteString(fmt.Sprintf("---\n*Generated %s with [claude-feats](https://github.com/dirkbrnd/claude-feats)*\n",
 		time.Now().Format(time.DateOnly)))
 
 	return sb.String()

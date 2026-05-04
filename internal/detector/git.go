@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dirkbrand/claude-feats/internal/store"
-	"github.com/dirkbrand/claude-feats/internal/transcript"
+	"github.com/dirkbrnd/claude-feats/internal/store"
+	"github.com/dirkbrnd/claude-feats/internal/transcript"
 )
 
 // Git detects feats based on git operations found in the session.

@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/dirkbrand/claude-feats/internal/store"
+	"github.com/dirkbrnd/claude-feats/internal/store"
 )
 
 var manaCmd = &cobra.Command{

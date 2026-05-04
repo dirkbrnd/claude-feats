@@ -41,7 +41,7 @@ Suggest running `claude-feats bio` — it calls Claude haiku with their feat his
 Run `claude-feats mana` and show the monthly breakdown.
 
 **"How do I install the hook?"**
-Tell them to run `claude-feats hook install`. This patches `~/.claude/settings.json` to run `claude-feats check` on every session stop. They need `claude-feats` on their PATH first (`go install github.com/dirkbrand/claude-feats@latest`).
+Tell them to run `claude-feats hook install`. This patches `~/.claude/settings.json` to run `claude-feats check` on every session stop. They need `claude-feats` on their PATH first (`go install github.com/dirkbrnd/claude-feats@latest`).
 
 ## Reading the output
 

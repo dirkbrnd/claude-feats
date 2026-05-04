@@ -1,4 +1,4 @@
-module github.com/dirkbrand/claude-feats
+module github.com/dirkbrnd/claude-feats
 
 go 1.24.0
 

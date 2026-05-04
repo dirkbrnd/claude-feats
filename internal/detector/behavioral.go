@@ -4,8 +4,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/dirkbrand/claude-feats/internal/store"
-	"github.com/dirkbrand/claude-feats/internal/transcript"
+	"github.com/dirkbrnd/claude-feats/internal/store"
+	"github.com/dirkbrnd/claude-feats/internal/transcript"
 )
 
 var triageLineRe = regexp.MustCompile(`(?m)^\d+\.\s+(?i:fix|skip)`)

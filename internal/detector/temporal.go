@@ -3,9 +3,9 @@ package detector
 import (
 	"time"
 
-	"github.com/dirkbrand/claude-feats/internal/catalog"
-	"github.com/dirkbrand/claude-feats/internal/store"
-	"github.com/dirkbrand/claude-feats/internal/transcript"
+	"github.com/dirkbrnd/claude-feats/internal/catalog"
+	"github.com/dirkbrnd/claude-feats/internal/store"
+	"github.com/dirkbrnd/claude-feats/internal/transcript"
 )
 
 // Temporal detects feats based on wall-clock time of the session.

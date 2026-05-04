@@ -3,8 +3,8 @@ package detector
 import (
 	"sync"
 
-	"github.com/dirkbrand/claude-feats/internal/store"
-	"github.com/dirkbrand/claude-feats/internal/transcript"
+	"github.com/dirkbrnd/claude-feats/internal/store"
+	"github.com/dirkbrnd/claude-feats/internal/transcript"
 )
 
 // Detector checks a session against a progress snapshot and returns feat IDs

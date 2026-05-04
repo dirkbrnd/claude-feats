@@ -12,8 +12,8 @@ import (
 	"github.com/anthropics/anthropic-sdk-go/option"
 	"github.com/spf13/cobra"
 
-	"github.com/dirkbrand/claude-feats/internal/catalog"
-	"github.com/dirkbrand/claude-feats/internal/store"
+	"github.com/dirkbrnd/claude-feats/internal/catalog"
+	"github.com/dirkbrnd/claude-feats/internal/store"
 )
 
 var bioCmd = &cobra.Command{

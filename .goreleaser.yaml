@@ -47,7 +47,7 @@ brews:
       owner: dirkbrand
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-    homepage: https://github.com/dirkbrand/claude-feats
+    homepage: https://github.com/dirkbrnd/claude-feats
     description: RPG-style feats for your Claude Code sessions
     license: MIT
     install: |

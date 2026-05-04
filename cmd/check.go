@@ -10,7 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/dirkbrand/claude-feats/internal/store"
+	"github.com/dirkbrnd/claude-feats/internal/store"
 )
 
 // hookPayload is the JSON that Claude Code's Stop hook sends on stdin.
