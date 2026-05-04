@@ -44,7 +44,7 @@ changelog:
 brews:
   - name: claude-feats
     repository:
-      owner: dirkbrand
+      owner: dirkbrnd
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
     homepage: https://github.com/dirkbrnd/claude-feats
