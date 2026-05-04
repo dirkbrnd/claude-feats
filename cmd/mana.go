@@ -34,13 +34,14 @@ func runMana(_ *cobra.Command, _ []string) error {
 	fmt.Printf("  ║         🔮  Mana Spellbook  🔮         ║\n")
 	fmt.Printf("  ╚══════════════════════════════════════╝%s\n\n", r)
 
-	// Lifetime
-	lt := p.Mana.Lifetime
-	fmt.Printf("  Lifetime tokens cast: %s\n", formatTokens(lt.Total()))
-	fmt.Printf("    Input:         %s\n", formatTokens(lt.InputTokens))
-	fmt.Printf("    Output:        %s\n", formatTokens(lt.OutputTokens))
-	fmt.Printf("    Cache created: %s\n", formatTokens(lt.CacheCreationInputTokens))
-	fmt.Printf("    Cache read:    %s\n\n", formatTokens(lt.CacheReadInputTokens))
+	// Lifetime (computed from monthly sums)
+	ltInput, ltOutput := p.Mana.LifetimeInputOutput()
+	ltCacheCreate, ltCacheRead := p.Mana.LifetimeCacheTokens()
+	fmt.Printf("  Lifetime tokens cast: %s\n", formatTokens(p.Mana.LifetimeTotal()))
+	fmt.Printf("    Input:         %s\n", formatTokens(ltInput))
+	fmt.Printf("    Output:        %s\n", formatTokens(ltOutput))
+	fmt.Printf("    Cache created: %s\n", formatTokens(ltCacheCreate))
+	fmt.Printf("    Cache read:    %s\n\n", formatTokens(ltCacheRead))
 
 	if len(p.Mana.Monthly) == 0 {
 		fmt.Println("  No monthly data yet.")

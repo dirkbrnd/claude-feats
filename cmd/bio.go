@@ -76,7 +76,7 @@ func buildBioPrompt(p *store.Progress) string {
 
 	sb.WriteString(fmt.Sprintf("Sessions analyzed: %d\n", p.Sessions.Total))
 	sb.WriteString(fmt.Sprintf("Current streak: %d days (longest: %d)\n", p.Streak.Current, p.Streak.Longest))
-	sb.WriteString(fmt.Sprintf("Lifetime tokens: %s\n", formatTokens(p.Mana.Lifetime.Total())))
+	sb.WriteString(fmt.Sprintf("Lifetime tokens: %s\n", formatTokens(p.Mana.LifetimeTotal())))
 
 	// Session timing tendencies
 	dayNames := []string{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}

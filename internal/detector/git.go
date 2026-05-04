@@ -3,7 +3,6 @@ package detector
 import (
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/dirkbrnd/claude-feats/internal/store"
@@ -128,32 +127,3 @@ func gitRoot(dir string) string {
 	}
 }
 
-// CacheDetector checks cache-efficiency feats from mana data.
-// It receives the per-session token counts directly.
-type CacheDetector struct {
-	InputTokens              int
-	CacheCreationInputTokens int
-	CacheReadInputTokens     int
-}
-
-func (c CacheDetector) Check(_ *transcript.Session, _ *store.Progress) []string {
-	total := c.InputTokens + c.CacheCreationInputTokens + c.CacheReadInputTokens
-	if total == 0 {
-		return nil
-	}
-	hitRate := float64(c.CacheReadInputTokens) / float64(total)
-
-	var ids []string
-	if hitRate >= 0.8 {
-		ids = append(ids, "cachemaster")
-	}
-	if hitRate >= 0.9 {
-		ids = append(ids, "cachehoarder")
-	}
-	return ids
-}
-
-// normalizeForMatch lowercases and strips excess whitespace.
-func normalizeForMatch(s string) string {
-	return strings.ToLower(strings.Join(strings.Fields(s), " "))
-}

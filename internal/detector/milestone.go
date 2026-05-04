@@ -120,39 +120,81 @@ func (HiddenMilestone) Check(s *transcript.Session, p *store.Progress) []string 
 	return ids
 }
 
-// ManaDetector checks token-based mana feats.
-type ManaDetector struct{}
+// ManaDetector checks token-based mana feats against the current progress state.
+// Should be run serially after UpdateMana has been called for this session.
+type ManaDetector struct {
+	// SessionTokens is the total tokens for the current session (input+output).
+	// Used for manaburn and precisioncast.
+	SessionTokens int
+	// SessionHasCommit indicates the session transcript contained a git push/commit.
+	SessionHasCommit bool
+	// CurrentMonth is "YYYY-MM" for the session being processed.
+	CurrentMonth string
+}
 
-func (ManaDetector) Check(_ *transcript.Session, p *store.Progress) []string {
+func (d ManaDetector) Check(s *transcript.Session, p *store.Progress) []string {
 	var ids []string
-	total := p.Mana.Lifetime.Total()
+	lifetime := p.Mana.LifetimeTotal()
 
-	if total >= 10_000_000 {
-		if _, had := p.Feats["spellbook10m"]; !had {
-			ids = append(ids, "spellbook10m")
+	// ── Option C — lifetime milestones ──
+	if lifetime >= 1_000_000 {
+		if _, had := p.Feats["incantation"]; !had {
+			ids = append(ids, "incantation")
 		}
 	}
-	if total >= 100_000_000 {
-		if _, had := p.Feats["spellbook100m"]; !had {
-			ids = append(ids, "spellbook100m")
+	if lifetime >= 10_000_000 {
+		if _, had := p.Feats["grimoire"]; !had {
+			ids = append(ids, "grimoire")
 		}
 	}
-	if total >= 1_000_000_000 {
-		if _, had := p.Feats["spellbook1b"]; !had {
-			ids = append(ids, "spellbook1b")
+	// hidden
+	if lifetime >= 100_000_000 {
+		if _, had := p.Feats["codexinfinitus"]; !had {
+			ids = append(ids, "codexinfinitus")
 		}
 	}
 
-	// Monthly mana feats
-	now := time.Now()
-	monthKey := now.Format("2006-01")
-	if m, ok := p.Mana.Monthly[monthKey]; ok {
-		monthTotal := m.InputTokens + m.OutputTokens
-		if monthTotal >= 1_000_000 {
-			ids = append(ids, "manamonth1m")
+	// ── Option A — monthly milestones ──
+	month := d.CurrentMonth
+	if month == "" {
+		month = time.Now().Format("2006-01")
+	}
+	if m, ok := p.Mana.Monthly[month]; ok {
+		mt := m.Total()
+		if mt >= 100_000 {
+			if _, had := p.Feats["apprenticemage"]; !had {
+				ids = append(ids, "apprenticemage")
+			}
 		}
-		if monthTotal >= 10_000_000 {
-			ids = append(ids, "manamonth10m")
+		if mt >= 1_000_000 {
+			if _, had := p.Feats["archmage"]; !had {
+				ids = append(ids, "archmage")
+			}
+		}
+		if mt >= 10_000_000 {
+			if _, had := p.Feats["thevoid"]; !had {
+				ids = append(ids, "thevoid")
+			}
+		}
+	}
+
+	// ── Option B — per-session efficiency ──
+	if d.SessionTokens > 100_000 {
+		ids = append(ids, "manaburn")
+	}
+	if d.SessionTokens > 0 && d.SessionTokens < 2_000 && d.SessionHasCommit {
+		ids = append(ids, "precisioncast")
+	}
+
+	// frugalmage — current month avg < previous month avg
+	if month != "" {
+		prev := store.PrevMonthKey(month)
+		if cur, ok1 := p.Mana.Monthly[month]; ok1 {
+			if prv, ok2 := p.Mana.Monthly[prev]; ok2 && prv.AvgPerSession() > 0 {
+				if cur.AvgPerSession() < prv.AvgPerSession() {
+					ids = append(ids, "frugalmage")
+				}
+			}
 		}
 	}
 

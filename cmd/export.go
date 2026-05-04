@@ -33,7 +33,7 @@ func buildMarkdown(p *store.Progress) string {
 
 	sb.WriteString("# ⚔️ claude-feats\n\n")
 	sb.WriteString(fmt.Sprintf("*%d sessions analyzed · %d-day streak · %s tokens cast*\n\n",
-		p.Sessions.Total, p.Streak.Current, formatTokens(p.Mana.Lifetime.Total())))
+		p.Sessions.Total, p.Streak.Current, formatTokens(p.Mana.LifetimeTotal())))
 
 	rarities := []catalog.Rarity{
 		catalog.Legendary, catalog.Epic, catalog.Rare, catalog.Uncommon, catalog.Common,

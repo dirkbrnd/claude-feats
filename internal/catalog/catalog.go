@@ -119,14 +119,19 @@ var All = []Feat{
 	// ── Meta ────────────────────────────────────────────────────────────────
 	{ID: "earlyinstall", Name: "Early Adopter", Description: "Installed claude-feats within 30 days of first public release.", Rarity: Epic, Countable: false},
 
-	// ── Mana (token-based) ──────────────────────────────────────────────────
-	{ID: "spellbook10m", Name: "Apprentice Arcanist", Description: "10 million lifetime tokens cast.", Rarity: Common, Countable: false},
-	{ID: "spellbook100m", Name: "Journeyman Mage", Description: "100 million lifetime tokens. The tome grows heavy.", Rarity: Uncommon, Countable: false},
-	{ID: "spellbook1b", Name: "Archmage", Description: "One billion tokens. You have truly mastered the arcane arts.", Rarity: Epic, Countable: false},
-	{ID: "cachemaster", Name: "Cache Lord", Description: "Cache hit rate above 80% in a session. Efficient.", Rarity: Uncommon, Countable: true},
-	{ID: "cachehoarder", Name: "Cache Dragon", Description: "Cache hit rate above 90%. You hoard context like treasure.", Rarity: Rare, Countable: true},
-	{ID: "manamonth1m", Name: "Mana Surge", Description: "1 million tokens in a single calendar month.", Rarity: Common, Countable: true},
-	{ID: "manamonth10m", Name: "Mana Torrent", Description: "10 million tokens in a single month. Unstoppable.", Rarity: Rare, Countable: true},
+	// ── Mana — monthly (Option A) ────────────────────────────────────────────
+	{ID: "apprenticemage", Name: "Apprentice Mage", Description: "100K tokens in a single calendar month.", Rarity: Common, Countable: false},
+	{ID: "archmage", Name: "Archmage", Description: "1M tokens in a single calendar month.", Rarity: Epic, Countable: false},
+	{ID: "thevoid", Name: "The Void", Description: "10M tokens in a single calendar month. Unfathomable.", Rarity: Legendary, Countable: false},
+
+	// ── Mana — efficiency (Option B) ────────────────────────────────────────
+	{ID: "manaburn", Name: "Mana Burn", Description: "Single session over 100K tokens. You spent big.", Rarity: Rare, Countable: true},
+	{ID: "precisioncast", Name: "Precision Cast", Description: "Under 2K tokens total and still shipped a commit.", Rarity: Uncommon, Countable: true},
+	{ID: "frugalmage", Name: "The Frugal Mage", Description: "Monthly avg tokens/session lower than the previous month.", Rarity: Rare, Countable: true},
+
+	// ── Mana — lifetime (Option C) ───────────────────────────────────────────
+	{ID: "incantation", Name: "Incantation", Description: "1 million lifetime tokens cast.", Rarity: Uncommon, Countable: false},
+	{ID: "grimoire", Name: "Grimoire", Description: "10 million lifetime tokens. The tome grows heavy.", Rarity: Epic, Countable: false},
 
 	// ── Hidden feats ────────────────────────────────────────────────────────
 	{ID: "ghostmode", Name: "Ghost Mode", Description: "A session with no user messages — pure tool-use.", Rarity: Epic, Hidden: true, Countable: true},
@@ -139,6 +144,7 @@ var All = []Feat{
 	{ID: "palindrome", Name: "Palindrome", Description: "Session number reads the same forwards and backwards.", Rarity: Uncommon, Hidden: true, Countable: true},
 	{ID: "ouroboros", Name: "Ouroboros", Description: "The snake that eats its own tail.", Rarity: Legendary, Hidden: true, Countable: true},
 	{ID: "inception", Name: "Inception", Description: "Dreams within dreams.", Rarity: Legendary, Hidden: true, Countable: true},
+	{ID: "codexinfinitus", Name: "Codex Infinitus", Description: "100 million lifetime tokens. You are beyond measure.", Rarity: Legendary, Hidden: true, Countable: false},
 }
 
 // ByID returns a feat by ID, or nil.

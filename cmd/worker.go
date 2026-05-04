@@ -33,8 +33,6 @@ func runWorker(_ *cobra.Command, _ []string) error {
 	if workerJobPath == "" {
 		return nil
 	}
-
-	// Read the pending job file
 	data, err := os.ReadFile(workerJobPath)
 	if err != nil {
 		return nil
@@ -44,27 +42,35 @@ func runWorker(_ *cobra.Command, _ []string) error {
 		return nil
 	}
 
-	// Parse the transcript
 	session, err := transcript.Parse(job.TranscriptPath)
 	if err != nil {
 		return nil
 	}
 
-	// Read cache usage from job (already recorded by check.go, but we need it
-	// to run the CacheDetector which only reads — no double-counting)
-	var cacheDetector detector.CacheDetector
-	// We can derive cache metrics from the transcript if needed; for now skip
-	// since check.go already updated mana. The CacheDetector needs raw numbers.
-	// We'll skip cache feats here since we don't re-read usage from the job.
-	_ = cacheDetector
+	unlocked, newFeats := analyzeSession(session, job.SessionID, time.Now().Format("2006-01"), 0)
 
+	printUnlocks(unlocked, newFeats)
+	_ = os.Remove(workerJobPath)
+	return nil
+}
+
+// analyzeSession runs all detectors for a parsed session and updates progress.json.
+// month is "YYYY-MM", sessionTokens is the usage total (0 if unknown).
+// Returns (allUnlockedIDs, firstTimeIDs).
+func analyzeSession(session *transcript.Session, sessionID, month string, sessionTokens int) ([]string, []string) {
 	var unlockedIDs []string
 	var newFeats []string
 
-	err = store.LoadLocked(func(p *store.Progress) error {
+	_ = store.LoadLocked(func(p *store.Progress) error {
+		if sessionID != "" {
+			if p.IsProcessed(sessionID) {
+				return nil
+			}
+			p.MarkProcessed(sessionID)
+		}
+
 		p.LastCheck = time.Now().UTC()
 
-		// Parallel detectors (read-only on progress)
 		parallel := []detector.Detector{
 			detector.Behavioral{},
 			detector.HiddenBehavioral{},
@@ -73,11 +79,14 @@ func runWorker(_ *cobra.Command, _ []string) error {
 			detector.Git{},
 		}
 
-		// Serial detectors (mutate progress counters)
 		serial := []detector.Detector{
 			detector.Milestone{},
 			detector.HiddenMilestone{},
-			detector.ManaDetector{},
+			detector.ManaDetector{
+				SessionTokens:    sessionTokens,
+				SessionHasCommit: session.HasGitPush,
+				CurrentMonth:     month,
+			},
 		}
 
 		ids := detector.RunAll(session, p, parallel, serial)
@@ -95,11 +104,12 @@ func runWorker(_ *cobra.Command, _ []string) error {
 		}
 		return nil
 	})
-	if err != nil {
-		return nil
-	}
 
-	// Print unlock notifications to stdout (CC may surface these)
+	return unlockedIDs, newFeats
+}
+
+// printUnlocks writes feat unlock notifications to stdout.
+func printUnlocks(unlockedIDs, newFeats []string) {
 	for _, id := range unlockedIDs {
 		f := catalog.ByID(id)
 		if f == nil {
@@ -116,11 +126,6 @@ func runWorker(_ *cobra.Command, _ []string) error {
 			fmt.Printf("  %s%s %s%s ×%d\n", f.Rarity.Color(), f.Rarity.Badge(), f.Name, reset, prog)
 		}
 	}
-
-	// Clean up the pending job file
-	_ = os.Remove(workerJobPath)
-
-	return nil
 }
 
 const reset = "\033[0m"
