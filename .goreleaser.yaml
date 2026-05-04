@@ -1,0 +1,56 @@
+version: 2
+
+project_name: claude-feats
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: claude-feats
+    main: .
+    binary: claude-feats
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+
+archives:
+  - id: claude-feats
+    formats:
+      - tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - README.md
+      - skills/**
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+
+brews:
+  - name: claude-feats
+    repository:
+      owner: dirkbrand
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    homepage: https://github.com/dirkbrand/claude-feats
+    description: RPG-style feats for your Claude Code sessions
+    license: MIT
+    install: |
+      bin.install "claude-feats"
+    test: |
+      system "#{bin}/claude-feats", "--help"
